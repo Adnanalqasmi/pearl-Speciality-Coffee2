@@ -1,1 +1,153 @@
-```html <!DOCTYPE html> <html lang="ar" dir="rtl"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Pearl Specialty Coffee</title> <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> <style> * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Tajawal', sans-serif; } body { background: #f5f5f5; } .container { max-width: 1200px; margin: 0 auto; padding: 20px; } header { text-align: center; padding: 20px; } .logo { width: 150px; height: 150px; border-radius: 50%; background: #1e88e5; margin: 0 auto; display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; } nav { background: white; padding: 15px; border-radius: 10px; margin: 20px 0; box-shadow: 0 2px 5px rgba(0,0,0,0.1); } nav ul { list-style: none; display: flex; justify-content: center; gap: 20px; } nav a { text-decoration: none; color: #333; font-weight: bold; padding: 5px 15px; border-radius: 5px; transition: 0.3s; } nav a:hover { background: #1e88e5; color: white; } .lang-switch { position: fixed; top: 20px; left: 20px; background: white; padding: 5px 15px; border-radius: 5px; cursor: pointer; box-shadow: 0 2px 5px rgba(0,0,0,0.1); } .main-content { background: white; padding: 20px; border-radius: 10px; margin-top: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); } @media (max-width: 768px) { nav ul { flex-direction: column; text-align: center; } } </style> </head> <body> <div class="lang-switch" onclick="toggleLanguage()">EN</div> <div class="container"> <header> <div class="logo"> <span>Pearl Coffee</span> </div> <h1>Pearl Specialty Coffee</h1> <p>Coffee & Sweets</p> </header> <nav> <ul> <li><a href="#"><i class="fas fa-home"></i> الرئيسية</a></li> <li><a href="#menu"><i class="fas fa-coffee"></i> القائمة</a></li> <li><a href="customer.html"><i class="fas fa-user"></i> العملاء</a></li> <li><a href="admin.html"><i class="fas fa-lock"></i> الإدارة</a></li> </ul> </nav> <div class="main-content"> <h2>أهلاً بكم في Pearl Specialty Coffee</h2> <p>نقدم أجود أنواع القهوة المختصة والحلويات الطازجة</p> </div> </div> <script> function toggleLanguage() { // يمكن إضافة منطق تغيير اللغة هنا const langBtn = document.querySelector('.lang-switch'); langBtn.textContent = langBtn.textContent === 'EN' ? 'عربي' : 'EN'; } </script> </body> </html> ``` 
+// index.js
+import React, { useState } from 'react';
+const LoginSystem = () => {
+// حالة اللغة وبيانات تسجيل الدخول
+const [language, setLanguage] = useState('ar');
+const [username, setUsername] = useState('');
+const [password, setPassword] = useState('');
+const [error, setError] = useState('');
+const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+// الترجمات
+const translations = {
+ar: {
+title: 'تسجيل الدخول',
+username: 'اسم المستخدم',
+password: 'كلمة المرور',
+login: 'دخول',
+systemName: 'نظام إدارة المقهى',
+error: 'اسم المستخدم أو كلمة المرور غير صحيحة'
+},
+en: {
+title: 'Login',
+username: 'Username',
+password: 'Password',
+login: 'Login',
+systemName: 'Cafe Management System',
+error: 'Invalid username or password'
+}
+};
+
+// بيانات المستخدمين
+const users = {
+admin: {
+username: 'admin',
+password: 'Pearl2024@Admin',
+role: 'admin'
+},
+employee: {
+username: 'employee',
+password: 'Pearl2024@Emp',
+role: 'employee'
+}
+};
+
+// دالة تسجيل الدخول
+const handleLogin = () => {
+const user = Object.values(users).find(
+user => user.username === username && user.password === password
+);
+
+if (user) {
+setIsLoggedIn(true);
+setError('');
+} else {
+setError(translations[language].error);
+}
+};
+
+// تبديل اللغة
+const toggleLanguage = () => {
+setLanguage(language === 'ar' ? 'en' : 'ar');
+};
+
+// واجهة تسجيل الدخول
+const loginJSX = `
+<div class="min-h-screen flex items-center justify-center bg-gray-100">
+<div class="bg-white p-8 rounded-lg shadow-md w-96">
+<button 
+class="mb-4 px-3 py-1 bg-gray-100 rounded"
+onClick={toggleLanguage}
+>
+{language === 'ar' ? 'English' : 'عربي'}
+</button>
+
+<div class="text-center mb-6">
+<h1 class="text-2xl font-bold">Pearl Specialty Coffee</h1>
+<p class="text-gray-600">{translations[language].systemName}</p>
+</div>
+
+<div class="space-y-4">
+<div>
+<label class="block text-gray-700 mb-2">
+{translations[language].username}
+</label>
+<input
+type="text"
+class="w-full border rounded px-3 py-2"
+value={username}
+onChange={(e) => setUsername(e.target.value)}
+dir={language === 'ar' ? 'rtl' : 'ltr'}
+/>
+</div>
+
+<div>
+<label class="block text-gray-700 mb-2">
+{translations[language].password}
+</label>
+<input
+type="password"
+class="w-full border rounded px-3 py-2"
+value={password}
+onChange={(e) => setPassword(e.target.value)}
+dir={language === 'ar' ? 'rtl' : 'ltr'}
+/>
+</div>
+
+{error && (
+<p class="text-red-500 text-sm text-center">{error}</p>
+)}
+
+<button 
+class="w-full bg-blue-600 text-white rounded py-2 hover:bg-blue-700"
+onClick={handleLogin}
+>
+{translations[language].login}
+</button>
+</div>
+</div>
+</div>
+`;
+
+return isLoggedIn ? <DashboardComponent /> : loginJSX;
+};
+
+// مكون لوحة التحكم
+const DashboardComponent = () => {
+return `
+<div class="min-h-screen bg-gray-100">
+<header class="bg-white shadow">
+<div class="max-w-7xl mx-auto py-6 px-4">
+<h1 class="text-3xl font-bold text-gray-900">
+Pearl Specialty Coffee Dashboard
+</h1>
+</div>
+</header>
+<main class="max-w-7xl mx-auto py-6 px-4">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-white overflow-hidden shadow rounded-lg p-6">
+<h3 class="text-lg font-medium text-gray-900">Orders</h3>
+</div>
+<div class="bg-white overflow-hidden shadow rounded-lg p-6">
+<h3 class="text-lg font-medium text-gray-900">Products</h3>
+</div>
+<div class="bg-white overflow-hidden shadow rounded-lg p-6">
+<h3 class="text-lg font-medium text-gray-900">Settings</h3>
+</div>
+</div>
+</main>
+</div>
+`;
+};
+
+export default LoginSystem;
